@@ -7,12 +7,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const APP_ID = process.env.APP_ID;
+const APP_ID = process.env.APP_ID;       // يحتوي على البادئة الكاملة
 const APP_SECRET = process.env.APP_SECRET;
-const SUB = process.env.SUB;
-
-// ✅ ده هو البادئة الخاصة بالغرف (Room Prefix) حسب JaaS
-const ROOM_PREFIX = "vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/01f783";
+const SUB = process.env.SUB;             // يحتوي على البادئة الكاملة
 
 app.post("/get-token", (req, res) => {
   const { name, email, room, isModerator } = req.body;
@@ -23,9 +20,9 @@ app.post("/get-token", (req, res) => {
 
   const payload = {
     aud: "jitsi",
-    iss: APP_ID,
-    sub: SUB,
-    room: `${ROOM_PREFIX}/${room}`, // ✅ الغرفة ببريفكس JaaS
+    iss: APP_ID,          // ✅ نفس .env
+    sub: SUB,             // ✅ نفس .env
+    room: room,           // ✅ بدون أي بريفكس، التوكن فيه البادئة بالفعل
     exp: Math.floor(Date.now() / 1000) + 3600,
     context: {
       user: {
@@ -39,7 +36,7 @@ app.post("/get-token", (req, res) => {
   const token = jwt.sign(payload, APP_SECRET, {
     algorithm: "HS256",
     header: {
-      kid: APP_ID
+      kid: APP_ID          // ✅ نفس .env
     }
   });
 

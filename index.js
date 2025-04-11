@@ -11,6 +11,9 @@ const APP_ID = process.env.APP_ID;
 const APP_SECRET = process.env.APP_SECRET;
 const SUB = process.env.SUB;
 
+// ✅ ده هو البادئة الخاصة بالغرف (Room Prefix) حسب JaaS
+const ROOM_PREFIX = "vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/01f783";
+
 app.post("/get-token", (req, res) => {
   const { name, email, room, isModerator } = req.body;
 
@@ -22,7 +25,7 @@ app.post("/get-token", (req, res) => {
     aud: "jitsi",
     iss: APP_ID,
     sub: SUB,
-    room: room,
+    room: `${ROOM_PREFIX}/${room}`, // ✅ الغرفة ببريفكس JaaS
     exp: Math.floor(Date.now() / 1000) + 3600,
     context: {
       user: {

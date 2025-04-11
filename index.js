@@ -33,7 +33,13 @@ app.post("/get-token", (req, res) => {
     },
   };
 
-  const token = jwt.sign(payload, APP_SECRET, { algorithm: "HS256" });
+const token = jwt.sign(payload, APP_SECRET, {
+  algorithm: "HS256",
+  header: {
+    kid:vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9
+ 
+  }
+});
   res.json({ token });
 });
 

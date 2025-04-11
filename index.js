@@ -7,9 +7,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const APP_ID ="vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/01f783"
+const APP_ID ="vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9"
 const APP_SECRET = process.env.APP_SECRET;
-const SUB ="vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/01f783"
+const SUB ="vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9"
 app.post("/get-token", (req, res) => {
   const { name, email, room, isModerator } = req.body;
 
@@ -21,7 +21,7 @@ app.post("/get-token", (req, res) => {
     aud: "jitsi",
     iss: APP_ID,          // ✅ نفس .env
     sub: SUB,             // ✅ نفس .env
-    room: room,           // ✅ بدون أي بريفكس، التوكن فيه البادئة بالفعل
+    room: room:"vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/01f783/$room"
     exp: Math.floor(Date.now() / 1000) + 3600,
     context: {
       user: {

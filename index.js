@@ -21,7 +21,7 @@ app.post("/get-token", (req, res) => {
     aud: "jitsi",
     iss: APP_ID,          // ✅ نفس .env
     sub: SUB,             // ✅ نفس .env
-    room:"vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/01f783/${room}",
+    room: `vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/01f783/${room}`,
     exp: Math.floor(Date.now() / 1000) + 3600,
     context: {
       user: {
@@ -43,4 +43,5 @@ app.post("/get-token", (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`);
+

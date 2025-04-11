@@ -7,9 +7,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const APP_ID ="vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9"
+const APP_ID =process.env.APP_ID
 const APP_SECRET = process.env.APP_SECRET;
-const SUB ="vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9"
+const SUB =process.env.SUB
 app.post("/get-token", (req, res) => {
   const { name, email, room, isModerator } = req.body;
 

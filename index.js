@@ -20,8 +20,8 @@ app.post("/get-token", (req, res) => {
 
   const payload = {
     aud: "jitsi",
-    iss: APP_ID,     // ✅ لازم يكون نفس App ID
-    sub: SUB,        // ✅ لازم يكون نفس App ID
+    iss: APP_ID,
+    sub: SUB,
     room: room,
     exp: Math.floor(Date.now() / 1000) + 3600,
     context: {
@@ -36,7 +36,7 @@ app.post("/get-token", (req, res) => {
   const token = jwt.sign(payload, APP_SECRET, {
     algorithm: "HS256",
     header: {
-      kid: APP_ID     // ✅ استخدم APP_ID من .env هنا كمان
+      kid: APP_ID
     }
   });
 

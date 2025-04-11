@@ -7,9 +7,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const APP_ID =process.env.APP_ID
+const APP_ID = process.env.APP_ID;
 const APP_SECRET = process.env.APP_SECRET;
-const SUB =process.env.SUB
+const SUB = process.env.SUB;
+
 app.post("/get-token", (req, res) => {
   const { name, email, room, isModerator } = req.body;
 
@@ -21,7 +22,7 @@ app.post("/get-token", (req, res) => {
     aud: "jitsi",
     iss: APP_ID,          // ✅ نفس .env
     sub: SUB,             // ✅ نفس .env
-    room: `vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/01f783/${room}`,
+        room: `${SUB}/${room}`, 
     exp: Math.floor(Date.now() / 1000) + 3600,
     context: {
       user: {
@@ -35,7 +36,7 @@ app.post("/get-token", (req, res) => {
   const token = jwt.sign(payload, APP_SECRET, {
     algorithm: "HS256",
     header: {
-      kid:"vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/01f783"
+      kid:APP_ID
     }
   });
 

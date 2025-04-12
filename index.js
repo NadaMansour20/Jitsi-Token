@@ -1,6 +1,7 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const cors = require("cors");
+const fs = require("fs");
 require("dotenv").config();
 
 const app = express();
@@ -8,8 +9,9 @@ app.use(cors());
 app.use(express.json());
 
 const APP_ID = process.env.APP_ID;
-const APP_SECRET = process.env.APP_SECRET;
 const SUB = process.env.SUB;
+const KEY_ID = process.env.KEY_ID;
+const privateKey = fs.readFileSync("./private.key", "utf8");
 
 app.post("/get-token", (req, res) => {
   const { name, email, room, isModerator } = req.body;
@@ -28,15 +30,20 @@ app.post("/get-token", (req, res) => {
       user: {
         name,
         email: email || "",
-        moderator: isModerator || false,
-      },
-    },
+        moderator: isModerator || false
+      }
+    }
   };
 
-  const token = jwt.sign(payload, APP_SECRET, { algorithm: "HS256" });
+  const token = jwt.sign(payload, privateKey, {
+    algorithm: "RS256",
+    keyid: KEY_ID
+  });
 
   res.json({ token });
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`✅ Token server running on port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`✅ Token server running on port ${PORT}`);
+});

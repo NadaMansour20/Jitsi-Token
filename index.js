@@ -20,29 +20,22 @@ app.post("/get-token", (req, res) => {
 
   const payload = {
     aud: "jitsi",
-    iss: APP_ID,          // ✅ نفس .env
-    sub: SUB,             // ✅ نفس .env
-        room: `${SUB}/${room}`, 
-    exp: Math.floor(Date.now() / 1000) + 3600,
+    iss: APP_ID,
+    sub: SUB,
+    room: `${SUB}/${room}`,
+    exp: Math.floor(Date.now() / 1000) + 60 * 60,
     context: {
       user: {
-        name: name,
+        name,
         email: email || "",
         moderator: isModerator || false,
       },
     },
   };
 
-  const token = jwt.sign(payload, APP_SECRET, {
-    algorithm: "HS256",
-    header: {
-      kid:APP_ID
-    }
-  });
+  const token = jwt.sign(payload, APP_SECRET, { algorithm: "HS256" });
 
   res.json({ token });
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
+app.listen(3000, () => console.log("✅ Token server running on http://localhost:3000"));

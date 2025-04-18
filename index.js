@@ -3,20 +3,15 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
+const path = require('path');
 
 const app = express();
 app.use(cors());
 
-// 🟢 اقرأ المفتاح الخاص من الملف
-const path = require('path');
 const privateKey = fs.readFileSync(path.join(__dirname, 'private_key.pem'), 'utf8');
-
-// 🟢 بيانات JaaS
 const appId = process.env.APP_ID;
 const tenant = process.env.TENANT_ID;
-
-// 🟢 Prefix ثابت لكل الغرف على JaaS
-const roomPrefix = "vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/d49a69";
+const roomPrefix = `${appId}/d49a69`; // لازم تبدّل d49a69 بالقيمة اللي ظهرالك في الـ API Key ID
 
 app.get('/token', (req, res) => {
   try {
@@ -25,15 +20,14 @@ app.get('/token', (req, res) => {
     const roomName = req.query.room || 'default';
     const isModerator = req.query.moderator === 'true';
 
-    // 🟢 هنا بيتم بناء room الكامل
     const room = `${roomPrefix}/${roomName}`;
 
     const payload = {
       aud: 'jitsi',
       iss: appId,
-      sub: appId,
+      sub: tenant,
       room,
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 3, // 3 ساعات
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 3,
       iat: Math.floor(Date.now() / 1000),
       context: {
         user: {
@@ -49,18 +43,18 @@ app.get('/token', (req, res) => {
       }
     };
 
-const token = jwt.sign(payload, privateKey, {
-  algorithm: 'RS256'
-});
+    const token = jwt.sign(payload, privateKey, {
+      algorithm: 'RS256',
+      keyid: 'd49a69' // لازم تكون هي نفسها اللي في رابط الـ API Key
+    });
 
     res.send({ token });
+
   } catch (error) {
     console.error('❌ Error generating token:', error.message);
     res.status(500).send('Internal Server Error');
   }
 });
-console.log("✅ privateKey start:\n", privateKey.slice(0, 100));
-
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(`✅ Token server running`);

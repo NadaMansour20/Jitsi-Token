@@ -16,7 +16,7 @@ const appId = process.env.APP_ID;
 const tenant = process.env.TENANT_ID;
 
 // 🟢 Prefix ثابت لكل الغرف على JaaS
-const roomPrefix = "vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/beb04b";
+const roomPrefix = "vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/d49a69";
 
 app.get('/token', (req, res) => {
   try {
@@ -50,9 +50,9 @@ app.get('/token', (req, res) => {
     };
 
 const token = jwt.sign(payload, privateKey, {
-  algorithm: 'RS256',
-  keyid: 'beb04b' 
+  algorithm: 'RS256'
 });
+
     res.send({ token });
   } catch (error) {
     console.error('❌ Error generating token:', error.message);

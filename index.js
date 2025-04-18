@@ -8,7 +8,8 @@ const app = express();
 app.use(cors());
 
 // 🟢 اقرأ المفتاح الخاص من الملف
-const privateKey = fs.readFileSync('./private_key.pem', 'utf8');
+const path = require('path');
+const privateKey = fs.readFileSync(path.join(__dirname, 'private_key.pem'), 'utf8');
 
 // 🟢 بيانات JaaS
 const appId = process.env.APP_ID;
@@ -48,13 +49,18 @@ app.get('/token', (req, res) => {
       }
     };
 
-    const token = jwt.sign(payload, privateKey, { algorithm: 'RS256' });
+const token = jwt.sign(payload, privateKey, {
+  algorithm: 'RS256',
+  keyid: 'beb04b' 
+});
     res.send({ token });
   } catch (error) {
     console.error('❌ Error generating token:', error.message);
     res.status(500).send('Internal Server Error');
   }
 });
+console.log("✅ privateKey start:\n", privateKey.slice(0, 100));
+
 
 app.listen(process.env.PORT || 3000, () => {
   console.log(`✅ Token server running`);

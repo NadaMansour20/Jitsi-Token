@@ -15,7 +15,7 @@ const appId = process.env.APP_ID;
 const tenant = process.env.TENANT_ID;
 
 // 🟢 Prefix ثابت لكل الغرف على JaaS
-const roomPrefix = `vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/01f783`;
+const roomPrefix = "vpaas-magic-cookie-5539cb854a4d47aba650f080c97d11b9/beb04b";
 
 app.get('/token', (req, res) => {
   try {

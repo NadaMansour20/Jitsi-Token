@@ -30,7 +30,7 @@ app.get('/token', (req, res) => {
     const payload = {
       aud: 'jitsi',
       iss: appId,
-      sub: tenant,
+      sub: appId,
       room,
       exp: Math.floor(Date.now() / 1000) + 60 * 60 * 3, // 3 ساعات
       iat: Math.floor(Date.now() / 1000),

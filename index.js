@@ -35,11 +35,6 @@ app.get('/token', (req, res) => {
           email: userEmail,
           moderator: isModerator
         },
-        features: {
-          livestreaming: true,
-          outbound_call: true,
-          transcribing: true
-        }
       }
     };
 

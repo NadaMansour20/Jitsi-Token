@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const app = express();
 app.use(cors());
 
-const privateKey = process.env.PRIVATE_KEY.split('\\n').join('\n');
+const privateKey = require('fs').readFileSync('./private_key.pem', 'utf8');
 const appId = process.env.APP_ID;
 const tenant = process.env.TENANT_ID;
 

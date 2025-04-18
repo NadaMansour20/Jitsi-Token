@@ -1,49 +1,46 @@
-const express = require("express");
-const jwt = require("jsonwebtoken");
-const cors = require("cors");
-const fs = require("fs");
-require("dotenv").config();
+require('dotenv').config();
+const express = require('express');
+const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 const app = express();
 app.use(cors());
-app.use(express.json());
 
-const APP_ID = process.env.APP_ID;
-const SUB = process.env.SUB;
-const KEY_ID = process.env.KEY_ID;
-const privateKey = fs.readFileSync("./private.key", "utf8");
+const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, '\n');
+const appId = process.env.APP_ID;
+const tenant = process.env.TENANT_ID;
 
-app.post("/get-token", (req, res) => {
-  const { name, email, room, isModerator } = req.body;
-
-  if (!name || !room) {
-    return res.status(400).send("Missing name or room");
-  }
+app.get('/token', (req, res) => {
+  const userName = req.query.name || 'Guest';
+  const userEmail = req.query.email || 'guest@example.com';
+  const room = req.query.room || '*';
+  const isModerator = req.query.moderator === 'true';
 
   const payload = {
-    aud: "jitsi",
-    iss: APP_ID,
-    sub: SUB,
-    room: `${SUB}/${room}`,
+    aud: 'jitsi',
+    iss: appId,
+    sub: tenant,
+    room,
     exp: Math.floor(Date.now() / 1000) + 60 * 60,
     context: {
       user: {
-        name,
-        email: email || "",
-        moderator: isModerator || false
+        name: userName,
+        email: userEmail,
+        moderator: isModerator
+      },
+      features: {
+        livestreaming: true,
+        outbound_call: true,
+        transcribing: true
       }
     }
   };
 
-  const token = jwt.sign(payload, privateKey, {
-    algorithm: "RS256",
-    keyid: KEY_ID
-  });
-
-  res.json({ token });
+  const token = jwt.sign(payload, privateKey, { algorithm: 'RS256' });
+  res.send({ token });
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`✅ Token server running on port ${PORT}`);
+app.listen(3000, () => {
+  console.log('✅ Token server running on http://localhost:3000');
 });

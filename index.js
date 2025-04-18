@@ -14,21 +14,25 @@ const privateKey = fs.readFileSync(path.join(__dirname, 'private_key.pem'), 'utf
 // 🆔 بيانات الـ App والـ Tenant
 const appId = process.env.APP_ID;
 const tenant = process.env.TENANT_ID;
+const apiKeyId = '0a1615'; // من آخر جزء في API Key ID
 
 // 🔐 إنشاء التوكن
 app.get('/token', (req, res) => {
   try {
     const userName = req.query.name || 'Guest';
     const userEmail = req.query.email || 'guest@example.com';
-    const roomName = req.query.room || '*'; // لو عايزة تخليه داينمك حطي req.query.room
+    const roomName = req.query.room || 'default';
     const isModerator = req.query.moderator === 'true';
+
+    // 🔁 بناء الغرفة بنفس شكل رابط JaaS
+    const room = `${appId}/${apiKeyId}/${roomName}`;
 
     const payload = {
       aud: 'jitsi',
       iss: appId,
       sub: tenant,
-      room: roomName, // هنا ممكن تعملي "*", أو `${prefix}/${roomName}` لو عايزة تحديد غرفة
-      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 3, // 3 ساعات
+      room: room,
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 3,
       iat: Math.floor(Date.now() / 1000),
       context: {
         user: {
@@ -41,7 +45,7 @@ app.get('/token', (req, res) => {
 
     const token = jwt.sign(payload, privateKey, {
       algorithm: 'RS256',
-      keyid: '0a1615' // لازم تطابق الـ API Key ID
+      keyid: apiKeyId
     });
 
     res.send({ token });

@@ -11,7 +11,7 @@ app.use(cors());
 const privateKey = fs.readFileSync(path.join(__dirname, 'private_key.pem'), 'utf8');
 const appId = process.env.APP_ID;
 const tenant = process.env.TENANT_ID;
-const roomPrefix = `${appId}/d49a69`; // لازم تبدّل d49a69 بالقيمة اللي ظهرالك في الـ API Key ID
+const roomPrefix = `${appId}/0a1615`; // لازم تبدّل d49a69 بالقيمة اللي ظهرالك في الـ API Key ID
 
 app.get('/token', (req, res) => {
   try {
@@ -45,7 +45,7 @@ app.get('/token', (req, res) => {
 
     const token = jwt.sign(payload, privateKey, {
       algorithm: 'RS256',
-      keyid: 'd49a69' // لازم تكون هي نفسها اللي في رابط الـ API Key
+      keyid: '0a1615' // لازم تكون هي نفسها اللي في رابط الـ API Key
     });
 
     res.send({ token });

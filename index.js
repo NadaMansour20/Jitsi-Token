@@ -41,6 +41,7 @@ app.get('/token', (req, res) => {
   res.send({ token });
 });
 
-app.listen(3000, () => {
-  console.log('✅ Token server running on http://localhost:3000');
+app.listen(process.env.PORT || 3000, () => {
+  console.log(`✅ Token server running`);
 });
+

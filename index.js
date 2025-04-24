@@ -24,7 +24,6 @@ app.get('/token', (req, res) => {
     const roomName = req.query.room || 'default';
     const isModerator = req.query.moderator === 'true';
 
-    // 🔁 بناء الغرفة بنفس شكل رابط JaaS
     const room = `${appId}/${apiKeyId}/${roomName}`;
 
     const payload = {
